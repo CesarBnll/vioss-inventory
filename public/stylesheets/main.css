@@ -1,0 +1,15 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00adef;
+  font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Terminator Real NFI';
+    src: url(../fonts/TerminatorRealNFI.woff2);
+    src: url(../fonts/TerminatorRealNFI.woff);
+}

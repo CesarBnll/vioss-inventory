@@ -1,4 +1,4 @@
-const { getConnection } = require('../database/database');
+const { pool } = require('../database/database');
 
 const auth = async (req, res) => {
     try {
@@ -11,8 +11,7 @@ const auth = async (req, res) => {
             return res.status(400).render('./login', options);
         }
 
-        let connection = await getConnection();
-        let user = await connection.query(`
+        let user = pool.query(`
             SELECT id, type
             FROM users
             WHERE email = '${email}' and password = '${pass}'
@@ -46,8 +45,7 @@ const recovery = async (req, res) => {
             return res.status(400).render('./recovery', options);
         }
 
-        let connection = await getConnection();
-        let update = await connection.query(`
+        let update = pool.query(`
             UPDATE users
             SET password = '${new_pass}'
             WHERE email = '${email}'

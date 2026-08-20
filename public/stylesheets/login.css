@@ -1,0 +1,31 @@
+body {
+    background-image: url(../images/vioss_bg.png);
+    color: white;
+}
+
+h4 {
+    font-family: 'Terminator Real NFI';
+}
+
+form {
+    background-color: rgba(36, 26, 93, 0.8);
+    width: 400px;
+    padding: 25px;
+    border-radius: 20px;
+}
+
+.btn {
+    background-color: #00adef;
+    color: white;
+    font-weight: bold;
+}
+
+@media screen and (width < 600px) {
+    form {
+        width: 320px;
+    }
+
+    h4 {
+        font-size: 1.2rem;
+    }
+}

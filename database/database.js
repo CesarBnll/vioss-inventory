@@ -1,15 +1,11 @@
-const { createConnection } = require('promise-mysql');
+const { createPool } = require('promise-mysql');
 
-const connection = createConnection({
+const pool = createPool({
     host: process.env.HOST,
-    port: 3306,
+    port: process.env.PORT,
     user: process.env.USERNAME,
     password: process.env.PASSWORD,
     database: process.env.DATABASE
 });
 
-const getConnection = () => {
-    return connection;
-};
-
-module.exports = { getConnection };
+module.exports = { pool };
