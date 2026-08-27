@@ -1,6 +1,6 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Myriad Pro";
 }
 
 a {
@@ -12,4 +12,15 @@ a {
     font-family: 'Terminator Real NFI';
     src: url(../fonts/TerminatorRealNFI.woff2);
     src: url(../fonts/TerminatorRealNFI.woff);
+}
+
+@font-face {
+  font-family: "Myriad Pro";
+  src: url(../fonts/MYRIADPRO-REGULAR.woff2);
+}
+
+@font-face {
+  font-family: "Myriad Pro";
+  src: url(../fonts/MYRIADPRO-BOLD.woff2);
+  font-weight: bold;
 }

@@ -1,0 +1,103 @@
+body {
+    background: linear-gradient(#00adef, #2a5484);
+    min-height: 100vh;
+    color: white;
+    padding: 0;
+}
+
+.admin-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 64px;
+    padding: 0 1.25rem;
+    background: rgba(36, 26, 93, 0.92);
+}
+
+.admin-brand,
+.admin-brand:hover {
+    color: white;
+    font-family: 'Terminator Real NFI', sans-serif;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.admin-menu-toggle {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    background: transparent;
+    color: white;
+    font-size: 1.25rem;
+    line-height: 1;
+    padding: 0.55rem 0.7rem;
+}
+
+.admin-sidebar {
+    background: rgba(36, 26, 93, 0.96);
+    color: white;
+}
+
+.admin-sidebar-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.25rem;
+}
+
+.admin-sidebar-header h1 {
+    font-family: 'Terminator Real NFI', sans-serif;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.admin-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1.25rem;
+}
+
+.admin-navigation-link {
+    align-items: center;
+    border-radius: 4px;
+    color: white;
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    text-decoration: none;
+}
+
+.admin-navigation-link:hover,
+.admin-navigation-link.active {
+    background: rgba(0, 173, 239, 0.8);
+    color: white;
+}
+
+.admin-navigation-link i {
+    text-align: center;
+    width: 1.25rem;
+}
+
+.admin-navigation-heading {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.75rem;
+    margin: 1rem 0 0.25rem;
+    text-transform: uppercase;
+}
+
+#v-pills-tab {
+    background: rgba(36, 26, 93, 0.8);
+    min-height: 100vh;
+    padding: 1.5rem;
+    width: 12%;
+}
+
+@media screen and (min-width: 600px) {
+    .admin-mobile-header {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #v-pills-tab {
+        display: none;
+    }
+}

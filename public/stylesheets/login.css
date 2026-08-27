@@ -1,5 +1,6 @@
 body {
     background-image: url(../images/vioss_bg.png);
+    background-size: auto;
     color: white;
 }
 

@@ -11,19 +11,20 @@ const auth = async (req, res) => {
             return res.status(400).render('./login', options);
         }
 
-        let user = pool.query(`
+        let [results] = await pool.query(`
             SELECT id, type
             FROM users
-            WHERE email = '${email}' and password = '${pass}'
-        `);
-        if (user.length == 0) {
+            WHERE email = ? AND passwd = ?
+        `, [email, pass]);
+
+        if (results.length == 0) {
             options['message'] = "false";
             return res.status(400).render('./login', options);
         }
         
-        req.session.user_id = user[0].id;
-        req.session.user_type = user[0].type;
-        if (user[0].type == 'admin') {
+        req.session.user_id = results[0].id;
+        req.session.user_type = results[0].type;
+        if (results[0].type == 'admin') {
             return res.redirect('/admin');
         } else {
             return res.redirect('/users');
@@ -45,15 +46,16 @@ const recovery = async (req, res) => {
             return res.status(400).render('./recovery', options);
         }
 
-        let update = pool.query(`
+        let [results] = pool.query(`
             UPDATE users
             SET password = '${new_pass}'
             WHERE email = '${email}'
         `);
-        if (update.affectedRows == 0) {
+        if (results.affectedRows == 0) {
             options['message'] = 'false';
             return res.status(400).render('./recovery', options);
         }
+        
         return res.redirect('/login?recovery=true');
     } catch (err) {
         return res.status(500).render(err.message);

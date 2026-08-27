@@ -1,0 +1,28 @@
+body {
+    background: linear-gradient(#00adef, #2a5484);
+    min-height: 100vh;
+    color: white;
+}
+
+h3 {
+    font-weight: bold;
+}
+
+form {
+    background-color: rgba(36, 26, 93, 0.8);
+    width: 400px;
+    padding: 25px;
+    border-radius: 20px;
+}
+
+.btn {
+    background-color: #00adef;
+    color: white;
+    font-weight: bold;
+}
+
+@media screen and (width < 600px) {
+    form {
+        width: 320px;
+    }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="icon" type="image/x-icon" href="../public/images/logo_blue.ico"/>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Propietary CSS -->
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/admin.css">
+</head>
+<body>
+  <header class="admin-mobile-header">
+    <a class="admin-brand" href="/admin">Vioss Administrativo</a>
+    <button class="admin-menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Abrir navegación">
+      <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <aside class="admin-sidebar offcanvas offcanvas-start" tabindex="-1" id="adminSidebar" aria-labelledby="adminSidebarTitle">
+    <div class="offcanvas-header admin-sidebar-header">
+      <h1 class="offcanvas-title" id="adminSidebarTitle">Vioss Administrativo</h1>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar navegación"></button>
+    </div>
+    <nav class="offcanvas-body admin-navigation" aria-label="Navegación administrativa">
+      <a class="admin-navigation-link active" aria-current="page" href="#">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        <span>Inicio</span>
+      </a>
+      <a class="admin-navigation-link" href="#">
+        <i class="fa fa-link" aria-hidden="true"></i>
+        <span>Enlace</span>
+      </a>
+      <p class="admin-navigation-heading">Opciones</p>
+      <a class="admin-navigation-link" href="#">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+        <span>Acción</span>
+      </a>
+      <a class="admin-navigation-link" href="#">
+        <i class="fa fa-folder-open" aria-hidden="true"></i>
+        <span>Otra acción</span>
+      </a>
+      <a class="admin-navigation-link" href="#">
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+        <span>Más información</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="admin-content">
+    <h2>Panel administrativo</h2>
+  </main>
+</body>
+</html>
