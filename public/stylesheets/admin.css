@@ -1,6 +1,8 @@
 body {
-    background: linear-gradient(#00adef, #2a5484);
-    min-height: 100vh;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url(../images/vioss_bg.png);
+    background-size: cover;
     color: white;
     padding: 0;
 }
@@ -65,7 +67,6 @@ body {
     text-decoration: none;
 }
 
-.admin-navigation-link:hover,
 .admin-navigation-link.active {
     background: rgba(0, 173, 239, 0.8);
     color: white;
@@ -84,20 +85,58 @@ body {
 }
 
 #v-pills-tab {
-    background: rgba(36, 26, 93, 0.8);
-    min-height: 100vh;
+    background: rgba(0, 173, 239, 0.8);
+    border-radius: 0.5rem;
+    min-height: 96.5vh;
     padding: 1.5rem;
-    width: 12%;
+    width: 280px;
 }
 
-@media screen and (min-width: 600px) {
-    .admin-mobile-header {
+.nav-link {
+    border-radius: 4px;
+    background: rgba(36, 26, 93, 0.6);
+    font-size: 1.2rem;
+    color: rgb(225, 225, 225);
+    margin-bottom: 0.35rem;
+    padding: 0.75rem;
+}
+
+.nav-link.active {
+    background: rgba(36, 26, 93, 1);
+    font-size: 1.5rem;
+    color: white;
+}
+
+.nav-link.active:active {
+    background: rgba(36, 26, 93, 1);
+    font-size: 1.5rem;
+    color: white;
+}
+
+.nav-link:hover {
+    background: rgba(36, 26, 93, 1);
+    font-size: 1.5rem;
+    transition: all 0.2s ease-in-out;
+    border-radius: 4px;
+    color: white;
+    margin-bottom: 0.35rem;
+    padding: 0.75rem;
+}
+
+@media screen and (width < 1000px) {
+    #v-pills-tab {
+        width: 240px;
+    }
+}
+
+@media screen and (width < 600px) {
+    #v-pills-tab {
         display: none;
     }
 }
 
-@media screen and (max-width: 600px) {
-    #v-pills-tab {
+@media screen and (min-width: 600px) {
+    .admin-mobile-header {
         display: none;
     }
 }

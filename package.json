@@ -1,9 +1,10 @@
 {
   "name": "viossgps",
-  "version": "0.0.0",
+  "version": "0.3",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node --watch ./bin/www",
+    "dev": "nodemon ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -14,6 +15,9 @@
     "express-session": "^1.18.1",
     "http-errors": "~1.6.3",
     "morgan": "^1.11.0",
-    "promise-mysql": "^5.2.0"
+    "mysql2": "^3.24.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

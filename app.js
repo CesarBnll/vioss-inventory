@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(session({
-    secret: '19679846516',
+    secret: 'quew9iy378122h',
     resave: true,
     saveUninitialized: false
 }));
