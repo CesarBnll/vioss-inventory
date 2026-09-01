@@ -41,7 +41,7 @@ router.get('/user', function(req, res, next) {
     return res.render('user', options);
   }
 });
-router.post('/users/logout', login_controller.logout);
+router.post('/user/logout', login_controller.logout);
 
 /* ---------------- Admin page ---------------- */
 router.get('/admin', function(req, res, next) {
