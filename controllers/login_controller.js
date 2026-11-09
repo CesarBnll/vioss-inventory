@@ -1,6 +1,7 @@
 const { pool } = require('../database/database');
 
 const auth = async (req, res) => {
+    let conn;
     try {
         const { email, pass } = req.body;
         let options = {
@@ -10,27 +11,29 @@ const auth = async (req, res) => {
             options['message'] = "missing";
             return res.status(400).render('./login', options);
         }
-
-        let [results] = await pool.query(`
+        conn = await pool.getConnection();
+        let [results] = await conn.query(`
             SELECT id, type
             FROM users
             WHERE email = ? AND passwd = ?
         `, [email, pass]);
-
-        if (results.length == 0) {
+        
+        if (!results) {
             options['message'] = "false";
             return res.status(400).render('./login', options);
         }
         
-        req.session.user_id = results[0].id;
-        req.session.user_type = results[0].type;
-        if (results[0].type == 'admin') {
+        req.session.user_id = results.id;
+        req.session.user_type = results.type;
+        if (results.type == 'admin') {
             return res.redirect('/admin');
         } else {
             return res.redirect('/users');
         }
     } catch(err) {
         return res.status(500).render(err.message);
+    } finally {
+        if (conn) conn.release();
     }
 };
 

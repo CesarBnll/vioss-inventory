@@ -1,4 +1,5 @@
 const express = require('express');
+const { pool } = require('../database/database');
 const login_controller = require('../controllers/login_controller');
 const admin_controller = require('../controllers/admin_controller');
 const user_controller = require('../controllers/user_controller');
@@ -44,13 +45,25 @@ router.get('/user', function(req, res, next) {
 router.post('/user/logout', login_controller.logout);
 
 /* ---------------- Admin page ---------------- */
-router.get('/admin', function(req, res, next) {
+router.get('/admin', async function(req, res, next) {
   if ((!req.session.user_id) || req.session.user_type != 'admin') {
     return res.redirect('/login?redirect=true&admin=false');
   } else {
-    return res.render('admin', { title: "Vioss Administrativo" });
+    let options = {
+      title: "Vioss Administrativo"
+    }
+    let conn = await pool.getConnection();
+    let results = await conn.query(`
+      SELECT name, email, phone, type
+      FROM users
+    `);
+    options['users'] = results;
+    return res.render('admin', options);
   }
 });
 router.post('/admin/logout', login_controller.logout);
+//router.post('/admin/add_user', admin_controller.add_user);
+//router.post('/admin/delete_user', admin_controller.delete_user);
+//router.post('/admin/update_user', admin_controller.update_user);
 
 module.exports = router;

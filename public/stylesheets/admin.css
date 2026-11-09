@@ -1,9 +1,5 @@
 body {
-    background-image: 
-        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url(../images/vioss_bg.png);
-    background-size: cover;
-    color: white;
+    color: #d3d3d3;
     padding: 0;
 }
 
@@ -78,49 +74,65 @@ body {
 }
 
 .admin-navigation-heading {
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 0.75rem;
     margin: 1rem 0 0.25rem;
     text-transform: uppercase;
 }
 
 #v-pills-tab {
-    background: rgba(0, 173, 239, 0.8);
-    border-radius: 0.5rem;
-    min-height: 96.5vh;
+    background: rgba(0, 173, 239, 0.9);
+    min-height: 100vh;
     padding: 1.5rem;
     width: 280px;
 }
 
+#v-pills-logout-form button {
+    border-radius: 4px;
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255, 0.9);
+    margin-bottom: 0.35rem;
+    padding: 0.75rem;
+    width: 100%;
+}
+
 .nav-link {
     border-radius: 4px;
-    background: rgba(36, 26, 93, 0.6);
-    font-size: 1.2rem;
-    color: rgb(225, 225, 225);
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255, 0.9);
     margin-bottom: 0.35rem;
     padding: 0.75rem;
 }
 
-.nav-link.active {
-    background: rgba(36, 26, 93, 1);
-    font-size: 1.5rem;
-    color: white;
+.nav-pills {
+    --bs-nav-pills-link-active-bg: rgba(36, 26, 93, 0.6);
 }
 
-.nav-link.active:active {
-    background: rgba(36, 26, 93, 1);
+.nav-link:active,
+.nav-link.active {
+    font-weight: bold;
     font-size: 1.5rem;
     color: white;
 }
 
 .nav-link:hover {
-    background: rgba(36, 26, 93, 1);
+    background-color: rgba(36, 26, 93, 0.6);
+    font-weight: bold;
     font-size: 1.5rem;
     transition: all 0.2s ease-in-out;
     border-radius: 4px;
     color: white;
     margin-bottom: 0.35rem;
     padding: 0.75rem;
+}
+
+#v-pills-tabContent {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 0rem 0.5rem 0.5rem 0rem;
+    min-height: 96.5vh;
+    min-width: 85%;
+    padding: 1.5rem;
+    color: black;
 }
 
 @media screen and (width < 1000px) {
@@ -132,6 +144,12 @@ body {
 @media screen and (width < 600px) {
     #v-pills-tab {
         display: none;
+    }
+
+    #v-pills-tabContent {
+        border-radius: 0.5rem;
+        min-width: 100%;
+        min-height: 89vh;
     }
 }
 
