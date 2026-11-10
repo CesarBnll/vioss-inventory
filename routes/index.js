@@ -58,6 +58,7 @@ router.get('/admin', async function(req, res, next) {
       FROM users
     `);
     options['users'] = results;
+    if (conn) conn.release();
     return res.render('admin', options);
   }
 });
