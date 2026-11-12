@@ -210,26 +210,29 @@
       </div>
     </div>
     <script>
-      document.querySelectorAll('[data-bs-toggle="pill"]').forEach(tabButton => {
+      const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
+        
+      tabButtons.forEach(tabButton => {
         tabButton.addEventListener('shown.bs.tab', event => {
           const selectedTarget = event.target.getAttribute('data-bs-target');
-          document.querySelectorAll('[data-bs-toggle="pill"]').forEach(button => {
+        
+          // Keep both navs (mobile + desktop) in sync
+          tabButtons.forEach(button => {
             const isSelected = button.getAttribute('data-bs-target') === selectedTarget;
             button.classList.toggle('active', isSelected);
             button.setAttribute('aria-selected', String(isSelected));
           });
+        
+          // Remember the tab on refresh (matches your ?tab= query handling)
+          const tabName = selectedTarget.replace('#v-pills-', '');
+          history.replaceState(null, '', `/admin?tab=${tabName}`);
+        
+          // Close the mobile sidebar after choosing a tab
+          const sidebar = document.getElementById('adminSidebar');
+          const offcanvas = bootstrap.Offcanvas.getInstance(sidebar);
+          if (offcanvas) offcanvas.hide();
         });
       });
     </script>
-    <% if (message) { %>
-      <script>
-        window.setTimeout(() => {
-          const feedback = document.getElementById('admin-feedback');
-          if (feedback) {
-            bootstrap.Alert.getOrCreateInstance(feedback).close();
-          }
-        }, 4000);
-      </script>
-    <% } %>
   </body>
 </html>
