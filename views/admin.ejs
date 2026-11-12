@@ -18,6 +18,12 @@
     <link rel="stylesheet" href="/stylesheets/admin.css">
   </head>
   <body>
+    <% if (message) { %>
+      <div id="admin-feedback" class="alert alert-<%= message.type === 'success' ? 'success' : 'danger' %> alert-dismissible fade show admin-feedback" role="alert" aria-live="polite">
+        <%= message.text %>
+      </div>
+    <% } %>
+
     <header class="admin-mobile-header">
       <a class="admin-brand" href="/admin">Vioss Administrativo</a>
       <button class="admin-menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Abrir navegación">
@@ -30,25 +36,25 @@
         <h1 class="offcanvas-title" id="adminSidebarTitle">Vioss Administrativo</h1>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar navegación"></button>
       </div>
-      <nav class="offcanvas-body admin-navigation" aria-label="Navegación administrativa">
-        <button class="nav-link active" id="v-pills-inventory-tab" data-bs-toggle="pill" data-bs-target="#v-pills-inventory" type="button" role="tab" aria-controls="v-pills-inventory" aria-selected="true">
+      <nav class="offcanvas-body admin-navigation nav-pills" role="tablist" aria-orientation="vertical" aria-label="Navegación administrativa">
+        <button class="nav-link <%= activeTab === 'inventory' ? 'active' : '' %>" id="v-pills-inventory-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-inventory" type="button" role="tab" aria-controls="v-pills-inventory" aria-selected="<%= activeTab === 'inventory' %>">
           <i class="fa-solid fa-house me-1"></i>
           <span>Activos</span>
         </button>
-        <button class="nav-link" id="v-pills-users-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'users' ? 'active' : '' %>" id="v-pills-users-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users" aria-selected="<%= activeTab === 'users' %>">
           <i class="fa-solid fa-user me-1"></i>
           <span>Usuarios</span>
         </button>
-        <button class="nav-link" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'history' ? 'active' : '' %>" id="v-pills-history-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="<%= activeTab === 'history' %>">
           <i class="fa-solid fa-clock-rotate-left me-1"></i>
           <span>Historial</span>
         </button>
-        <button class="nav-link" id="v-pills-actions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-actions" type="button" role="tab" aria-controls="v-pills-actions" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'actions' ? 'active' : '' %>" id="v-pills-actions-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-actions" type="button" role="tab" aria-controls="v-pills-actions" aria-selected="<%= activeTab === 'actions' %>">
           <i class="fa-solid fa-gear me-1"></i>
           <span>Acciones</span>
         </button>
         <form action="/admin/logout" id="v-pills-logout-form" method="post">
-          <button type="submit" class="nav-link" id="v-pills-logout-tab" data-bs-toggle="pill" data-bs-target="#v-pills-logout" type="button" role="tab" aria-controls="v-pills-logout" aria-selected="false">
+          <button type="submit" class="nav-link" id="v-pills-logout-tab" data-bs-toggle="modal" data-bs-target="#logoutModal" type="button" role="tab" aria-controls="v-pills-logout" aria-selected="false">
             <i class="fa-solid fa-sign-out-alt me-1"></i>
             <span>Salir</span>
           </button>
@@ -59,51 +65,114 @@
     <div class="d-flex">
       <div class="nav flex-column nav-pills text-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <img src="/images/logo_white.png" alt="Logo de Vioss" class="img-fluid mt-3 mb-5">
-        <button class="nav-link active" id="v-pills-inventory-tab" data-bs-toggle="pill" data-bs-target="#v-pills-inventory" type="button" role="tab" aria-controls="v-pills-inventory" aria-selected="true">
+        <button class="nav-link <%= activeTab === 'inventory' ? 'active' : '' %>" id="v-pills-inventory-tab" data-bs-toggle="pill" data-bs-target="#v-pills-inventory" type="button" role="tab" aria-controls="v-pills-inventory" aria-selected="<%= activeTab === 'inventory' %>">
           <i class="fa-solid fa-house me-1 nav-icon"></i>
           <span class="nav-label">Activos</span>
         </button>
-        <button class="nav-link" id="v-pills-users-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'users' ? 'active' : '' %>" id="v-pills-users-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users" aria-selected="<%= activeTab === 'users' %>">
           <i class="fa-solid fa-user me-1 nav-icon"></i>
           <span class="nav-label">Usuarios</span>
         </button>
-        <button class="nav-link" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'history' ? 'active' : '' %>" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="<%= activeTab === 'history' %>">
           <i class="fa-solid fa-clock-rotate-left me-1 nav-icon"></i>
           <span class="nav-label">Historial</span>
         </button>
-        <button class="nav-link" id="v-pills-actions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-actions" type="button" role="tab" aria-controls="v-pills-actions" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'actions' ? 'active' : '' %>" id="v-pills-actions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-actions" type="button" role="tab" aria-controls="v-pills-actions" aria-selected="<%= activeTab === 'actions' %>">
           <i class="fa-solid fa-gear me-1 nav-icon"></i>
           <span class="nav-label">Acciones</span>
         </button>
-        <form action="/admin/logout" id="v-pills-logout-form" method="post">
-          <button type="submit" class="nav-link" id="v-pills-logout-tab" data-bs-toggle="pill" data-bs-target="#v-pills-logout" type="button" role="tab" aria-controls="v-pills-logout" aria-selected="false">
-            <i class="fa-solid fa-sign-out-alt me-1 nav-icon"></i>
-            <span class="nav-label">Salir</span>
-          </button>
-        </form>
+        <button type="button" class="nav-link" id="v-pills-logout-modal" data-bs-toggle="modal" data-bs-target="#logoutModal" aria-controls="v-pills-logout" aria-selected="false">
+          <i class="fa-solid fa-sign-out-alt me-1 nav-icon"></i>
+          <span class="nav-label">Salir</span>
+        </button>
       </div>
-      <div class="tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="v-pills-inventory" role="tabpanel" aria-labelledby="v-pills-inventory-tab" tabindex="0">Inventory</div>
-        <div class="tab-pane fade" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab" tabindex="0">
-          <div class="text-center mt-4 mb-4">
-            <span class="align-middle" style="font-size: 2.5rem;"style="font-size: 2.5rem;">
-              <i class="fa solid fa-users" style="font-size: 5rem;"></i>
-                  Usuarios: <%= users.length %>
-            </span>
+
+      <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="logoutModalLabel">Cerrar Sesión</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ¿Estás seguro de que quieres salir?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <form action="/admin/logout" id="logoutModal" method="post">
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+              </form>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade <%= activeTab === 'inventory' ? 'show active' : '' %>" id="v-pills-inventory" role="tabpanel" aria-labelledby="v-pills-inventory-tab" tabindex="0">Inventory</div>
+
+        <div class="tab-pane fade <%= activeTab === 'users' ? 'show active' : '' %>" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab" tabindex="0">
+          <div class="text-center align-middle mt-4 mb-4">
+            <i class="fa solid fa-users fs-1"></i>
+            <span class="fs-2 ms-2">Usuarios: <%= users.length %></span>
+          </div>
+
           <div class="row">
             <div class="col-md-4">
-              <div class="input-group mb-3">
+              <div id="tableSearch" class="input-group mb-3">
                 <span class="input-group-text" id="search-addon"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" class="form-control" placeholder="Buscar..." aria-label="search" aria-describedby="search-addon">
+                <input type="text" class="form-control" placeholder="Buscar..." onkeyup="filterTable()" aria-label="search" aria-describedby="search-addon">
               </div>
             </div>
             <div class="col-md-8 text-end mb-3">
-              <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addUserModal">
+              <button id="addUserBtn" class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addUserModal">
                 <i class="fa-solid fa-user-plus"></i> Agregar Usuario
               </button> 
             </div>
           </div>
+
+          <div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="addUserModalLabel">Agregar Usuario</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="/admin/add_user" method="post" class="row g-3">
+                    <div class="col-md-6">
+                      <label for="name" class="form-label">Nombre y Apellido</label>
+                      <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="phone" class="form-label">Teléfono</label>
+                      <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="password" class="form-label">Contraseña</label>
+                      <input type="password" class="form-control" id="pass" name="pass" required>
+                    </div>
+                    <div class="col-md-12">
+                      <label for="type" class="form-label">Rol</label>
+                      <select class="form-select" id="type" name="type" required>
+                        <option disabled>Seleccionar rol</option>
+                        <option value="admin">Administrador</option>
+                        <option value="user">Usuario</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 mt-4 mb-2 text-center"> 
+                      <button type="button" id="addUserFormBtn"class="btn btn-secondary col-md-5 me-3" data-bs-dismiss="modal">Cancelar</button>
+                      <button type="submit" id="addUserFormBtn" class="btn btn-primary col-md-5 fw-bold">Confirmar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="table-responsive">
             <table class="table table-hover">
               <thead class="table-dark">
@@ -112,16 +181,20 @@
                   <th scope="col">Email</th>
                   <th scope="col">Teléfono</th>
                   <th scope="col">Rol</th>
-                  <th scope="col">Acciones</th>
+                  <th style="width: 160px;" scope="col">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 <% users.forEach(user => { %>
-                  <tr class="align-middle">
+                  <tr class="align-middle text-nowrap">
                     <td><%= user.name %></td>
                     <td><%= user.email %></td>
                     <td><%= user.phone %></td>
-                    <td><%= user.type %></td>
+                    <% if (user.type === 'admin') { %>
+                      <td>Administrador</td>
+                    <% } else { %>
+                      <td>Usuario</td>
+                    <% } %>
                     <td>
                       <button class="btn btn-sm btn-outline-primary">Editar</button>
                       <button class="btn btn-sm btn-outline-danger">Eliminar</button>
@@ -131,28 +204,34 @@
               </tbody>
             </table>  
           </div>
-          
-          <!-- 
-          <form action="/admin/add_user" method="post">
-            <div class="mb-3">
-              <label for="user-name" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="user-name" name="name" required>
-            </div>
-            <div class="mb-3">
-              <label for="user-email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="user-email" name="email" required>
-            </div>
-            <div class="mb-3">
-              <label for="user-password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="user-password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Agregar Usuario</button>
-          </form>
-          -->
         </div>
-        <div class="tab-pane fade" id="v-pills-history" role="tabpanel" aria-labelledby="v-pills-history-tab" tabindex="0">History</div>
-        <div class="tab-pane fade" id="v-pills-actions" role="tabpanel" aria-labelledby="v-pills-actions-tab" tabindex="0">Actions</div>
+
+        <div class="tab-pane fade <%= activeTab === 'history' ? 'show active' : '' %>" id="v-pills-history" role="tabpanel" aria-labelledby="v-pills-history-tab" tabindex="0">History</div>
+
+        <div class="tab-pane fade <%= activeTab === 'actions' ? 'show active' : '' %>" id="v-pills-actions" role="tabpanel" aria-labelledby="v-pills-actions-tab" tabindex="0">Actions</div>
       </div>
     </div>
+    <script>
+      document.querySelectorAll('[data-bs-toggle="pill"]').forEach(tabButton => {
+        tabButton.addEventListener('shown.bs.tab', event => {
+          const selectedTarget = event.target.getAttribute('data-bs-target');
+          document.querySelectorAll('[data-bs-toggle="pill"]').forEach(button => {
+            const isSelected = button.getAttribute('data-bs-target') === selectedTarget;
+            button.classList.toggle('active', isSelected);
+            button.setAttribute('aria-selected', String(isSelected));
+          });
+        });
+      });
+    </script>
+    <% if (message) { %>
+      <script>
+        window.setTimeout(() => {
+          const feedback = document.getElementById('admin-feedback');
+          if (feedback) {
+            bootstrap.Alert.getOrCreateInstance(feedback).close();
+          }
+        }, 4000);
+      </script>
+    <% } %>
   </body>
 </html>

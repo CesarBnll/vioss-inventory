@@ -50,8 +50,11 @@ router.get('/admin', async function(req, res, next) {
     return res.redirect('/login?redirect=true&admin=false');
   } else {
     let options = {
-      title: "Vioss Administrativo"
+      title: "Vioss Administrativo",
+      activeTab: ['inventory', 'users', 'history', 'actions'].includes(req.query.tab) ? req.query.tab : 'inventory',
+      message: req.session.adminMessage || null
     }
+    delete req.session.adminMessage;
     let conn = await pool.getConnection();
     let results = await conn.query(`
       SELECT name, email, phone, type
@@ -63,7 +66,7 @@ router.get('/admin', async function(req, res, next) {
   }
 });
 router.post('/admin/logout', login_controller.logout);
-//router.post('/admin/add_user', admin_controller.add_user);
+router.post('/admin/add_user', admin_controller.add_user);
 //router.post('/admin/delete_user', admin_controller.delete_user);
 //router.post('/admin/update_user', admin_controller.update_user);
 
