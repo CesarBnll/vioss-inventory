@@ -3,11 +3,11 @@ const { pool } = require('../database/database');
 const auth = async (req, res) => {
     let conn;
     try {
-        const { email, pass } = req.body;
+        const { email, passwd } = req.body;
         let options = {
             title: 'Iniciar Sesión'
         }
-        if (email == "" || pass == "") {
+        if (email == "" || passwd == "") {
             options['message'] = "missing";
             return res.status(400).render('./login', options);
         }
@@ -16,7 +16,7 @@ const auth = async (req, res) => {
             SELECT id, type
             FROM users
             WHERE email = ? AND passwd = ?
-        `, [email, pass]);
+        `, [email, passwd]);
         
         if (!results) {
             options['message'] = "false";
@@ -39,11 +39,11 @@ const auth = async (req, res) => {
 
 const recovery = async (req, res) => {
     try {
-        const { email, new_pass } = req.body;
+        const { email, new_passwd } = req.body;
         let options = {
             title: 'Iniciar Sesión',
         }
-        if ((email || new_pass) == "") {
+        if ((email || new_passwd) == "") {
             options['message'] = 'missing';
             console.log(options);
             return res.status(400).render('./recovery', options);
@@ -51,7 +51,7 @@ const recovery = async (req, res) => {
 
         let [results] = pool.query(`
             UPDATE users
-            SET password = '${new_pass}'
+            SET password = '${new_passwd}'
             WHERE email = '${email}'
         `);
         if (results.affectedRows == 0) {

@@ -46,7 +46,7 @@ router.post('/user/logout', login_controller.logout);
 
 /* ---------------- Admin page ---------------- */
 router.get('/admin', async function(req, res, next) {
-  if ((!req.session.user_id) || req.session.user_type != 'admin') {
+  if (!req.session.user_id || req.session.user_type !== 'admin') {
     return res.redirect('/login?redirect=true&admin=false');
   } else {
     let options = {
