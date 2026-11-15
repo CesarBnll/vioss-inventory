@@ -65,9 +65,15 @@ router.get('/admin', async function(req, res, next) {
     return res.render('admin', options);
   }
 });
+const requireAdmin = (req, res, next) => {
+  if (!req.session.user_id || req.session.user_type !== 'admin') {
+    return res.redirect('/login?redirect=true&admin=false');
+  }
+  next();
+};
 router.post('/admin/logout', login_controller.logout);
 router.post('/admin/add_user', admin_controller.add_user);
-//router.post('/admin/delete_user', admin_controller.delete_user);
-//router.post('/admin/update_user', admin_controller.update_user);
+router.post('/admin/delete_user', admin_controller.delete_user);
+router.post('/admin/update_user', admin_controller.update_user);
 
 module.exports = router;

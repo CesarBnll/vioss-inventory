@@ -45,6 +45,72 @@ const add_user = async (req, res) => {
     }
 };
 
+const update_user = async (req, res) => {
+    let conn;
+    try {
+        const { original_email, name, email, phone, type, pass } = req.body;
+        if (![original_email, name, email, phone, type].every(v => typeof v === 'string' && v.trim())) {
+            req.session.adminMessage = { type: 'error', text: 'Completa todos los campos para editar el usuario.' };
+            return res.redirect('/admin?tab=users');
+        }
+
+        conn = await pool.getConnection();
+        let sql = 'UPDATE users SET name = ?, email = ?, phone = ?, type = ?';
+        const params = [name, email, phone, type];
+        if (typeof pass === 'string' && pass.trim()) {
+            sql += ', passwd = ?';
+            params.push(pass);
+        }
+        sql += ' WHERE email = ?';
+        params.push(original_email);
+
+        const results = await conn.query(sql, params);
+        req.session.adminMessage = results.affectedRows === 0
+            ? { type: 'error', text: 'No se encontró el usuario.' }
+            : { type: 'success', text: 'Usuario actualizado correctamente.' };
+    } catch (err) {
+        console.error('Error updating user:', err);
+        req.session.adminMessage = {
+            type: 'error',
+            text: err.code === 'ER_DUP_ENTRY'
+                ? 'Ya existe un usuario con ese email.'
+                : 'Ocurrió un error al actualizar el usuario.'
+        };
+    } finally {
+        if (conn) conn.release();
+    }
+    return res.redirect('/admin?tab=users');
+};
+
+const delete_user = async (req, res) => {
+    let conn;
+    try {
+        const { email } = req.body;
+        if (typeof email !== 'string' || !email.trim()) {
+            req.session.adminMessage = { type: 'error', text: 'Usuario no válido.' };
+            return res.redirect('/admin?tab=users');
+        }
+
+        conn = await pool.getConnection();
+        // "id <> ?" stops an admin from deleting their own account
+        const results = await conn.query(
+            'DELETE FROM users WHERE email = ? AND id <> ?',
+            [email, req.session.user_id]
+        );
+        req.session.adminMessage = results.affectedRows === 0
+            ? { type: 'error', text: 'No se pudo eliminar el usuario (o es tu propia cuenta).' }
+            : { type: 'success', text: 'Usuario eliminado correctamente.' };
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        req.session.adminMessage = { type: 'error', text: 'Ocurrió un error al eliminar el usuario.' };
+    } finally {
+        if (conn) conn.release();
+    }
+    return res.redirect('/admin?tab=users');
+};
+
 module.exports = {
-    add_user
+    add_user,
+    update_user,
+    delete_user
 };

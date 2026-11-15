@@ -127,7 +127,8 @@
               </button> 
             </div>
           </div>
-
+          
+          <!-- Add user modal -->
           <div class="modal fade" id="addUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
@@ -171,6 +172,72 @@
             </div>
           </div>
 
+          <!-- Edit user modal -->
+          <div class="modal fade" id="editUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="editUserModalLabel">Editar Usuario</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="/admin/update_user" method="post" class="row g-3">
+                    <input type="hidden" id="editOriginalEmail" name="original_email">
+                    <div class="col-md-6">
+                      <label for="editName" class="form-label">Nombre y Apellido</label>
+                      <input type="text" class="form-control" id="editName" name="name" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="editPhone" class="form-label">Teléfono</label>
+                      <input type="tel" class="form-control" id="editPhone" name="phone" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="editEmail" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="editEmail" name="email" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="editPass" class="form-label">Nueva contraseña</label>
+                      <input type="password" class="form-control" id="editPass" name="pass" placeholder="Dejar vacío para no cambiar">
+                    </div>
+                    <div class="col-md-12">
+                      <label for="editType" class="form-label">Rol</label>
+                      <select class="form-select" id="editType" name="type" required>
+                        <option value="admin">Administrador</option>
+                        <option value="user">Usuario</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 mt-4 mb-2 text-center">
+                      <button type="button" class="btn btn-secondary col-md-5 me-3" data-bs-dismiss="modal">Cancelar</button>
+                      <button type="submit" class="btn btn-primary col-md-5 fw-bold">Guardar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delete user modal -->
+          <div class="modal fade" id="deleteUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="deleteUserModalLabel">Eliminar Usuario</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ¿Seguro que quieres eliminar a <strong id="deleteUserName"></strong>? Esta acción no se puede deshacer.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <form action="/admin/delete_user" method="post">
+                    <input type="hidden" id="deleteUserEmail" name="email">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="table-responsive">
             <table class="table table-hover">
               <thead class="table-dark">
@@ -194,8 +261,16 @@
                       <td>Usuario</td>
                     <% } %>
                     <td>
-                      <button class="btn btn-sm btn-outline-primary">Editar</button>
-                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                      <button class="btn btn-sm btn-outline-primary edit-user-btn"
+                              data-bs-toggle="modal" data-bs-target="#editUserModal"
+                              data-name="<%= user.name %>"
+                              data-email="<%= user.email %>"
+                              data-phone="<%= user.phone %>"
+                              data-type="<%= user.type %>">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger delete-user-btn"
+                              data-bs-toggle="modal" data-bs-target="#deleteUserModal"
+                              data-name="<%= user.name %>"
+                              data-email="<%= user.email %>">Eliminar</button>
                     </td>
                   </tr>
                 <% }); %>
@@ -232,6 +307,24 @@
           const offcanvas = bootstrap.Offcanvas.getInstance(sidebar);
           if (offcanvas) offcanvas.hide();
         });
+      });
+
+      // Handle edit user modal
+      document.getElementById('editUserModal').addEventListener('show.bs.modal', event => {
+        const d = event.relatedTarget.dataset;
+        document.getElementById('editOriginalEmail').value = d.email;
+        document.getElementById('editName').value = d.name;
+        document.getElementById('editPhone').value = d.phone;
+        document.getElementById('editEmail').value = d.email;
+        document.getElementById('editType').value = d.type;
+        document.getElementById('editPass').value = '';
+      });
+
+      // Handle delete user modal
+      document.getElementById('deleteUserModal').addEventListener('show.bs.modal', event => {
+        const d = event.relatedTarget.dataset;
+        document.getElementById('deleteUserEmail').value = d.email;
+        document.getElementById('deleteUserName').textContent = d.name;
       });
     </script>
   </body>
