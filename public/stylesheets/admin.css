@@ -96,7 +96,8 @@ body {
 }
 
 .nav-pills {
-    --bs-nav-pills-link-active-bg: rgba(36, 26, 93, 0.6);
+    --bs-nav-pills-link-active-bg: #00abefcf;
+    --bs-nav-pills-link-active-color: #fff;
 }
 
 .nav-link:active,
@@ -109,7 +110,8 @@ body {
     color: rgb(255, 255, 255, 0.75);
 }
 
-.nav-link:hover {
+.nav-link:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.1);
     font-weight: bold;
     transition: all 0.2s ease-in-out;
     color: white;
