@@ -4,8 +4,8 @@ const add_user = async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
-        const { name, email, pass, phone, type } = req.body;
-        if (![name, email, pass, phone, type].every(value => typeof value === 'string' && value.trim())) {
+        const { name, email, passwd, phone, type } = req.body;
+        if (![name, email, passwd, phone, type].every(value => typeof value === 'string' && value.trim())) {
             req.session.adminMessage = {
                 type: 'error',
                 text: 'Completa todos los campos para agregar el usuario.'
@@ -16,7 +16,7 @@ const add_user = async (req, res) => {
         const results = await conn.query(`
             INSERT INTO users (name, email, passwd, phone, type)
             VALUES (?, ?, ?, ?, ?)
-        `, [name, email, pass, phone, type]);
+        `, [name, email, passwd, phone, type]);
 
         if (results.affectedRows === 0) {
             req.session.adminMessage = {
@@ -48,18 +48,21 @@ const add_user = async (req, res) => {
 const update_user = async (req, res) => {
     let conn;
     try {
-        const { original_email, name, email, phone, type, pass } = req.body;
-        if (![original_email, name, email, phone, type].every(v => typeof v === 'string' && v.trim())) {
+        const { original_email, name, email, phone, type, passwd } = req.body;
+        if (![original_email, name, email, phone].every(v => typeof v === 'string' && v.trim())) {
             req.session.adminMessage = { type: 'error', text: 'Completa todos los campos para editar el usuario.' };
             return res.redirect('/admin?tab=users');
         }
 
+        // Only accept known roles; anything else is ignored
+        const newType = ['admin', 'user'].includes(type) ? type : null;
+
         conn = await pool.getConnection();
-        let sql = 'UPDATE users SET name = ?, email = ?, phone = ?, type = ?';
-        const params = [name, email, phone, type];
-        if (typeof pass === 'string' && pass.trim()) {
+        let sql = 'UPDATE users SET name = ?, email = ?, phone = ?, type = IF(id = ?, type, COALESCE(?, type))';
+        const params = [name, email, phone, req.session.user_id, newType];
+        if (typeof passwd === 'string' && passwd.trim()) {
             sql += ', passwd = ?';
-            params.push(pass);
+            params.push(passwd);
         }
         sql += ' WHERE email = ?';
         params.push(original_email);

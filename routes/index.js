@@ -45,35 +45,37 @@ router.get('/user', function(req, res, next) {
 router.post('/user/logout', login_controller.logout);
 
 /* ---------------- Admin page ---------------- */
-router.get('/admin', async function(req, res, next) {
-  if (!req.session.user_id || req.session.user_type !== 'admin') {
-    return res.redirect('/login?redirect=true&admin=false');
-  } else {
-    let options = {
-      title: "Vioss Administrativo",
-      activeTab: ['inventory', 'users', 'history', 'actions'].includes(req.query.tab) ? req.query.tab : 'inventory',
-      message: req.session.adminMessage || null
-    }
-    delete req.session.adminMessage;
-    let conn = await pool.getConnection();
-    let results = await conn.query(`
-      SELECT name, email, phone, type
-      FROM users
-    `);
-    options['users'] = results;
-    if (conn) conn.release();
-    return res.render('admin', options);
-  }
-});
 const requireAdmin = (req, res, next) => {
   if (!req.session.user_id || req.session.user_type !== 'admin') {
     return res.redirect('/login?redirect=true&admin=false');
   }
   next();
 };
+
+router.get('/admin', requireAdmin, async function (req, res, next) {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const users = await conn.query('SELECT id, name, email, phone, type FROM users');
+    const message = req.session.adminMessage || null;
+    delete req.session.adminMessage;
+
+    return res.render('admin', {
+      title: "Vioss Administrativo",
+      activeTab: ['inventory', 'users', 'history', 'actions'].includes(req.query.tab) ? req.query.tab : 'inventory',
+      message,
+      users,
+      currentUserId: req.session.user_id
+    });
+  } catch (err) {
+    next(err);
+  } finally {
+    if (conn) conn.release();
+  }
+});
 router.post('/admin/logout', login_controller.logout);
-router.post('/admin/add_user', admin_controller.add_user);
-router.post('/admin/delete_user', admin_controller.delete_user);
-router.post('/admin/update_user', admin_controller.update_user);
+router.post('/admin/add_user', requireAdmin, admin_controller.add_user);
+router.post('/admin/update_user', requireAdmin, admin_controller.update_user);
+router.post('/admin/delete_user', requireAdmin, admin_controller.delete_user);
 
 module.exports = router;

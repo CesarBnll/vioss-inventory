@@ -152,7 +152,7 @@
                     </div>
                     <div class="col-md-6">
                       <label for="password" class="form-label">Contraseña</label>
-                      <input type="password" class="form-control" id="pass" name="pass" required>
+                      <input type="password" class="form-control" id="passwd" name="passwd" required>
                     </div>
                     <div class="col-md-12">
                       <label for="type" class="form-label">Rol</label>
@@ -196,8 +196,8 @@
                       <input type="email" class="form-control" id="editEmail" name="email" required>
                     </div>
                     <div class="col-md-6">
-                      <label for="editPass" class="form-label">Nueva contraseña</label>
-                      <input type="password" class="form-control" id="editPass" name="pass" placeholder="Dejar vacío para no cambiar">
+                      <label for="editPasswd" class="form-label">Nueva contraseña</label>
+                      <input type="password" class="form-control" id="editPasswd" name="passwd" placeholder="Dejar vacío para no cambiar">
                     </div>
                     <div class="col-md-12">
                       <label for="editType" class="form-label">Rol</label>
@@ -206,6 +206,9 @@
                         <option value="user">Usuario</option>
                       </select>
                     </div>
+                    <p id="editSelfNote" class="form-text text-center mt-2 mb-0 d-none">
+                      <i class="fa-solid fa-circle-info me-1"></i>No puedes cambiar tu propio rol.
+                    </p>
                     <div class="col-md-12 mt-4 mb-2 text-center">
                       <button type="button" class="btn btn-secondary col-md-5 me-3" data-bs-dismiss="modal">Cancelar</button>
                       <button type="submit" class="btn btn-primary col-md-5 fw-bold">Guardar</button>
@@ -266,7 +269,8 @@
                               data-name="<%= user.name %>"
                               data-email="<%= user.email %>"
                               data-phone="<%= user.phone %>"
-                              data-type="<%= user.type %>">Editar</button>
+                              data-type="<%= user.type %>"
+                              data-self="<%= String(user.id) === String(currentUserId) %>">Editar</button>
                       <button class="btn btn-sm btn-outline-danger delete-user-btn"
                               data-bs-toggle="modal" data-bs-target="#deleteUserModal"
                               data-name="<%= user.name %>"
@@ -312,12 +316,18 @@
       // Handle edit user modal
       document.getElementById('editUserModal').addEventListener('show.bs.modal', event => {
         const d = event.relatedTarget.dataset;
+        const isSelf = d.self === 'true';
+            
         document.getElementById('editOriginalEmail').value = d.email;
         document.getElementById('editName').value = d.name;
         document.getElementById('editPhone').value = d.phone;
         document.getElementById('editEmail').value = d.email;
-        document.getElementById('editType').value = d.type;
         document.getElementById('editPass').value = '';
+            
+        const typeSelect = document.getElementById('editType');
+        typeSelect.value = d.type;
+        typeSelect.disabled = isSelf;
+        document.getElementById('editSelfNote').classList.toggle('d-none', !isSelf);
       });
 
       // Handle delete user modal
