@@ -1,6 +1,7 @@
 body {
-    color: #d3d3d3;
+    background: #e9ecef;
     padding: 0;
+    font-size: 1.1rem;
 }
 
 .admin-mobile-header {
@@ -81,65 +82,80 @@ body {
 }
 
 #v-pills-tab {
-    background: rgba(0, 173, 239, 0.9);
-    border-radius: 0.5rem 0rem 0rem 0.5rem;
-    min-height: 96.5vh;
+    background: rgba(36, 26, 93);
+    min-height: 100vh;
     padding: 1.5rem;
-    width: 280px;
-}
-
-#v-pills-logout-form button {
-    border-radius: 4px;
-    font-size: 1.5rem;
-    color: rgb(255, 255, 255, 0.9);
-    margin-bottom: 0.35rem;
-    padding: 0.75rem;
-    width: 100%;
 }
 
 .nav-link {
     border-radius: 4px;
-    font-size: 1.5rem;
-    color: rgb(255, 255, 255, 0.9);
+    font-size: 1.6rem;
+    color: rgb(255, 255, 255, 0.75);
     margin-bottom: 0.35rem;
     padding: 0.75rem;
 }
 
 .nav-pills {
-    --bs-nav-pills-link-active-bg: rgba(36, 26, 93, 0.6);
+    --bs-nav-pills-link-active-bg: #00abefcf;
+    --bs-nav-pills-link-active-color: #fff;
 }
 
 .nav-link:active,
 .nav-link.active {
     font-weight: bold;
-    font-size: 1.5rem;
     color: white;
 }
 
-.nav-link:hover {
-    background-color: rgba(36, 26, 93, 0.6);
+.nav-link:focus {
+    color: rgb(255, 255, 255, 0.75);
+}
+
+.nav-link:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.1);
     font-weight: bold;
-    font-size: 1.5rem;
     transition: all 0.2s ease-in-out;
-    border-radius: 4px;
     color: white;
-    margin-bottom: 0.35rem;
-    padding: 0.75rem;
 }
 
 #v-pills-tabContent {
-    background: rgba(255, 255, 255, 0.8);
     border-radius: 0rem 0.5rem 0.5rem 0rem;
-    min-height: 96.5vh;
     min-width: 85%;
     padding: 1.5rem;
     color: black;
 }
 
-@media screen and (width < 1000px) {
-    #v-pills-tab {
-        width: 240px;
-    }
+.admin-feedback {
+    left: 50%;
+    max-width: min(90vw, 32rem);
+    position: fixed;
+    top: 1rem;
+    transform: translateX(-50%);
+    z-index: 1080;
+}
+
+.modal {
+    font-size: 1.1rem;
+}
+
+#tableSearch .form-control {
+    font-size: 1.1em;
+}
+
+#addUserBtn {
+    font-size: 1.1rem;
+}
+
+.table-responsive{
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table button {
+    font-size: 1.1rem;
 }
 
 @media screen and (width < 600px) {
@@ -150,7 +166,16 @@ body {
     #v-pills-tabContent {
         border-radius: 0.5rem;
         min-width: 100%;
-        min-height: 89vh;
+    }
+}
+
+@media screen and (width < 1400px) {
+    .nav-label {
+        display: none;
+    }
+
+    .nav-icon {
+        font-size: clamp(1.5rem, 4vw + 1rem, 2rem);
     }
 }
 

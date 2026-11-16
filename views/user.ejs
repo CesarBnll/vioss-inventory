@@ -18,6 +18,17 @@
     <link rel="stylesheet" href="/stylesheets/user.css">
   </head>
   <body>
+    <% if (message) { %>
+      <div id="admin-feedback" class="alert alert-<%= message.type === 'success' ? 'success' : 'danger' %> alert-dismissible fade show admin-feedback" role="alert" aria-live="polite">
+        <% if (message.type === 'success') { %>
+          <i class="fa-solid fa-circle-check me-2"></i>
+        <% } else { %>
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        <% } %>
+        <%= message.text %>
+      </div>
+    <% } %>
+
     <header class="admin-mobile-header">
       <a class="admin-brand" href="/admin">Vioss Administrativo</a>
       <button class="admin-menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Abrir navegación">
@@ -30,56 +41,73 @@
         <h1 class="offcanvas-title" id="adminSidebarTitle">Vioss Administrativo</h1>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar navegación"></button>
       </div>
-      <nav class="offcanvas-body admin-navigation" aria-label="Navegación administrativa">
-        <a class="admin-navigation-link active" aria-current="page" href="#">
-          <i class="fa-solid fa-house"></i>
-          <span>Inicio</span>
-        </a>
-        <a class="admin-navigation-link" href="#">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          <span>Enlace</span>
-        </a>
-        <p class="admin-navigation-heading">Opciones</p>
-        <a class="admin-navigation-link" href="#">
-          <i class="fa-solid fa-gear"></i>
-          <span>Acción</span>
-        </a>
-        <a class="admin-navigation-link" href="#">
-          <i class="fa-solid fa-folder-open"></i>
-          <span>Otra acción</span>
-        </a>
-        <a class="admin-navigation-link" href="#">
-          <i class="fa-solid fa-circle-info"></i>
-          <span>Más información</span>
-        </a>
-      </nav>
-    </aside>
-
-    <div class="d-flex align-items-start m-3">
-      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <img src="/images/logo_white.png" alt="Logo de Vioss" class="img-fluid mt-3 mb-5">
-        <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
+      <nav class="offcanvas-body admin-navigation nav-pills" role="tablist" aria-orientation="vertical" aria-label="Navegación administrativa">
+        <button class="nav-link <%= activeTab === 'inventory' ? 'active' : '' %>" id="v-pills-inventory-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-inventory" type="button" role="tab" aria-controls="v-pills-inventory" aria-selected="<%= activeTab === 'inventory' %>">
           <i class="fa-solid fa-house me-1"></i>
           <span>Activos</span>
         </button>
-        <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'users' ? 'active' : '' %>" id="v-pills-users-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users" aria-selected="<%= activeTab === 'users' %>">
           <i class="fa-solid fa-user me-1"></i>
           <span>Usuarios</span>
         </button>
-        <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'history' ? 'active' : '' %>" id="v-pills-history-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="<%= activeTab === 'history' %>">
           <i class="fa-solid fa-clock-rotate-left me-1"></i>
           <span>Historial</span>
         </button>
-        <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+        <button class="nav-link <%= activeTab === 'actions' ? 'active' : '' %>" id="v-pills-actions-mobile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-actions" type="button" role="tab" aria-controls="v-pills-actions" aria-selected="<%= activeTab === 'actions' %>">
           <i class="fa-solid fa-gear me-1"></i>
           <span>Acciones</span>
         </button>
-        <form action="/user/logout" id="v-pills-logout-form" method="post">
-          <button type="submit" class="nav-link" id="v-pills-logout-tab" data-bs-toggle="pill" data-bs-target="#v-pills-logout" type="button" role="tab" aria-controls="v-pills-logout" aria-selected="false">
-            <i class="fa-solid fa-sign-out-alt me-1"></i>
-            <span>Salir</span>
-          </button>
-        </form>
+        <button type="button" class="nav-link" id="v-pills-logout-tab" data-bs-toggle="modal" data-bs-target="#logoutModal" role="tab" aria-controls="v-pills-logout" aria-selected="false">
+          <i class="fa-solid fa-sign-out-alt me-1"></i>
+          <span>Salir</span>
+        </button>
+      </nav>
+    </aside>
+
+    <div class="d-flex">
+      <div class="nav flex-column nav-pills text-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <img src="/images/logo_white.png" alt="Logo de Vioss" class="img-fluid mt-3 mb-5">
+        <button class="nav-link <%= activeTab === 'inventory' ? 'active' : '' %>" id="v-pills-inventory-tab" data-bs-toggle="pill" data-bs-target="#v-pills-inventory" type="button" role="tab" aria-controls="v-pills-inventory" aria-selected="<%= activeTab === 'inventory' %>">
+          <i class="fa-solid fa-house me-1 nav-icon"></i>
+          <span class="nav-label">Activos</span>
+        </button>
+        <button class="nav-link <%= activeTab === 'users' ? 'active' : '' %>" id="v-pills-users-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users" aria-selected="<%= activeTab === 'users' %>">
+          <i class="fa-solid fa-user me-1 nav-icon"></i>
+          <span class="nav-label">Usuarios</span>
+        </button>
+        <button class="nav-link <%= activeTab === 'history' ? 'active' : '' %>" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="<%= activeTab === 'history' %>">
+          <i class="fa-solid fa-clock-rotate-left me-1 nav-icon"></i>
+          <span class="nav-label">Historial</span>
+        </button>
+        <button class="nav-link <%= activeTab === 'actions' ? 'active' : '' %>" id="v-pills-actions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-actions" type="button" role="tab" aria-controls="v-pills-actions" aria-selected="<%= activeTab === 'actions' %>">
+          <i class="fa-solid fa-gear me-1 nav-icon"></i>
+          <span class="nav-label">Acciones</span>
+        </button>
+        <button type="button" class="nav-link" id="v-pills-logout-modal" data-bs-toggle="modal" data-bs-target="#logoutModal" aria-controls="v-pills-logout" aria-selected="false">
+          <i class="fa-solid fa-sign-out-alt me-1 nav-icon"></i>
+          <span class="nav-label">Salir</span>
+        </button>
+      </div>
+
+      <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="logoutModalLabel">Cerrar Sesión</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ¿Estás seguro de que quieres salir?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <form action="/users/logout" id="logoutForm" method="post">
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="tab-content" id="v-pills-tabContent">
         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">...</div>

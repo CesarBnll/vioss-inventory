@@ -1,20 +1,17 @@
 const express = require('express');
-const { pool } = require('../database/database');
 const login_controller = require('../controllers/login_controller');
-const admin_controller = require('../controllers/admin_controller');
-const user_controller = require('../controllers/user_controller');
 const router = express.Router();
 
 router.get('/', function (req, res) {
     res.redirect('/login');
-})
+});
 
 /* ---------------- Login page ---------------- */
 router.get('/login', function (req, res, next) {
     let options = {
         title: "Iniciar Sesión",
         message: ""
-    }
+    };
     if (req.query.redirect) {
         options["message"] = "auth";
     } else if (req.query.recovery) {
@@ -25,67 +22,9 @@ router.get('/login', function (req, res, next) {
 router.post('/login', login_controller.auth);
 
 /* ---------------- Recovery page ---------------- */
-router.get('/login/recovery', function(req, res, next) {
-  return res.render('recovery', { title: 'Reestablecer Contraseña', message: '' });
+router.get('/login/recovery', function (req, res, next) {
+    return res.render('recovery', { title: 'Reestablecer Contraseña', message: '' });
 });
 router.post('/login/recovery', login_controller.recovery);
-
-/* ---------------- User page ---------------- */
-const requireUser = (req, res, next) => {
-  if (!req.session.user_id) {
-    return res.redirect('/login?redirect=true&user=false');
-  }
-  next();
-};
-router.get('/user', requireUser, async function(req, res, next) {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const user = await conn.query('SELECT id, name, email, phone, type FROM users WHERE id = ?', [req.session.user_id]);
-
-    return res.render('user', { title: 'Vioss GPS', user: user[0] });
-  } catch (err) {
-    next(err);
-  } finally {
-    if (conn) conn.release();
-  }
-});
-router.post('/user/logout', login_controller.logout);
-
-/* ---------------- Admin page ---------------- */
-const requireAdmin = (req, res, next) => {
-  if (!req.session.user_id || req.session.user_type !== 'admin') {
-    return res.redirect('/login?redirect=true&admin=false');
-  }
-  next();
-};
-
-router.get('/admin', requireAdmin, async function (req, res, next) {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const users = await conn.query('SELECT id, name, email, phone, type FROM users');
-    const history = await conn.query('SELECT * FROM history ORDER BY date_of DESC');
-    const message = req.session.adminMessage || null;
-    delete req.session.adminMessage;
-
-    return res.render('admin', {
-      title: "Vioss Administrativo",
-      activeTab: ['inventory', 'users', 'history', 'actions'].includes(req.query.tab) ? req.query.tab : 'inventory',
-      message,
-      users,
-      history,
-      currentUserId: req.session.user_id
-    });
-  } catch (err) {
-    next(err);
-  } finally {
-    if (conn) conn.release();
-  }
-});
-router.post('/admin/logout', login_controller.logout);
-router.post('/admin/add_user', requireAdmin, admin_controller.add_user);
-router.post('/admin/update_user', requireAdmin, admin_controller.update_user);
-router.post('/admin/delete_user', requireAdmin, admin_controller.delete_user);
 
 module.exports = router;
