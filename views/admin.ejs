@@ -338,66 +338,7 @@
         <div class="tab-pane fade <%= activeTab === 'actions' ? 'show active' : '' %>" id="v-pills-actions" role="tabpanel" aria-labelledby="v-pills-actions-tab" tabindex="0">Actions</div>
       </div>
     </div>
-    <script>
-      const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
-        
-      tabButtons.forEach(tabButton => {
-        tabButton.addEventListener('shown.bs.tab', event => {
-          const selectedTarget = event.target.getAttribute('data-bs-target');
-        
-          // Keep both navs (mobile + desktop) in sync
-          tabButtons.forEach(button => {
-            const isSelected = button.getAttribute('data-bs-target') === selectedTarget;
-            button.classList.toggle('active', isSelected);
-            button.setAttribute('aria-selected', String(isSelected));
-          });
-        
-          // Remember the tab on refresh (matches your ?tab= query handling)
-          const tabName = selectedTarget.replace('#v-pills-', '');
-          history.replaceState(null, '', `/admin?tab=${tabName}`);
-        
-          // Close the mobile sidebar after choosing a tab
-          const sidebar = document.getElementById('adminSidebar');
-          const offcanvas = bootstrap.Offcanvas.getInstance(sidebar);
-          if (offcanvas) offcanvas.hide();
-        });
-      });
-
-      // Handle edit user modal
-      document.getElementById('editUserModal').addEventListener('show.bs.modal', event => {
-        const d = event.relatedTarget.dataset;
-        const isSelf = d.self === 'true';
-            
-        document.getElementById('editOriginalEmail').value = d.email;
-        document.getElementById('editName').value = d.name;
-        document.getElementById('editPhone').value = d.phone;
-        document.getElementById('editEmail').value = d.email;
-        document.getElementById('editPasswd').value = '';
-            
-        const typeSelect = document.getElementById('editType');
-        typeSelect.value = d.type;
-        typeSelect.disabled = isSelf;
-        document.getElementById('editSelfNote').classList.toggle('d-none', !isSelf);
-      });
-
-      // Handle delete user modal
-      document.getElementById('deleteUserModal').addEventListener('show.bs.modal', event => {
-        const d = event.relatedTarget.dataset;
-        document.getElementById('deleteUserEmail').value = d.email;
-        document.getElementById('deleteUserName').textContent = d.name;
-      });
-
-      // Handle auto-dismiss of feedback alert
-      document.addEventListener("DOMContentLoaded", function () {
-        const alertElement = document.getElementById("admin-feedback");
-        if (alertElement) {
-          const bsAlert = bootstrap.Alert.getOrCreateInstance(alertElement);
-          // Auto-close
-          const timer = setTimeout(() => {
-            bsAlert.close();
-          }, 5000);
-        }
-      });
-    </script>
+    <script src="/scripts/tabs.js" defer></script>
+    <script src="/scripts/admin.js" defer></script>
   </body>
 </html>
