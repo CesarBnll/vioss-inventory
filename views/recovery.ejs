@@ -28,12 +28,16 @@
             <input type="email" class="form-control" placeholder="vioss@gps.com" name="email">
         </div>
         <div>
-            <label for="new_passwd" class="form-label"><span class="fa-solid fa-lock fa-form me-2 mb-0"></span>Nueva Contraseña:</label>
+            <label for="new_passwd" class="form-label"><span class="fa-solid fa-lock fa-form ms-2 me-2 mb-0"></span>Nueva Contraseña:</label>
             <input type="password" class="form-control" id="new_passwd" placeholder="********" name="new_passwd">
         </div>
 
         <div class="d-flex justify-content-center mt-4">
             <button type="submit" class="btn px-60">Continuar</button>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <a href="/login">Volver a Login</a>
         </div>
 
         <% if (message == "missing") { %>

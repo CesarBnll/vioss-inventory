@@ -133,6 +133,10 @@ body {
     z-index: 1080;
 }
 
+.modal {
+    font-size: 1.1rem;
+}
+
 #tableSearch .form-control {
     font-size: 1.1em;
 }

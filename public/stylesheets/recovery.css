@@ -2,6 +2,7 @@ body {
     background: linear-gradient(#00adef, #2a5484);
     min-height: 100vh;
     color: white;
+    font-size: 1.2rem;
 }
 
 h3 {
@@ -19,6 +20,16 @@ form {
     background-color: #00adef;
     color: white;
     font-weight: bold;
+    font-size: 1.1rem;
+    opacity: 0.85;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    background-color: #00adef;
+    font-size: 1.5rem;
+    transition: all 0.2s ease-in-out;
+    opacity: 1;
 }
 
 @media screen and (width < 600px) {

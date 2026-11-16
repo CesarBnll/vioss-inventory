@@ -30,6 +30,17 @@ const add_user = async (req, res) => {
             type: 'success',
             text: 'Usuario agregado correctamente.'
         };
+
+        const user_name = await conn.query(`
+            SELECT name FROM users
+            WHERE id = ?
+        `, [req.session.user_id]);
+        user_name = user_name[0].name;
+
+        const resultsHistory = await conn.query(`
+            INSERT INTO history (details, user_name)
+            VALUES (?, ?)
+        `, [`Added user: ${name}`, user_name]);
         return res.redirect('/admin?tab=users');
     } catch (err) {
         console.error('Error adding admin user:', err);

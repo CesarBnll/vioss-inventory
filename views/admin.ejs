@@ -20,6 +20,11 @@
   <body>
     <% if (message) { %>
       <div id="admin-feedback" class="alert alert-<%= message.type === 'success' ? 'success' : 'danger' %> alert-dismissible fade show admin-feedback" role="alert" aria-live="polite">
+        <% if (message.type === 'success') { %>
+          <i class="fa-solid fa-circle-check me-2"></i>
+        <% } else { %>
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        <% } %>
         <%= message.text %>
       </div>
     <% } %>
@@ -111,7 +116,7 @@
         <div class="tab-pane fade <%= activeTab === 'users' ? 'show active' : '' %>" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab" tabindex="0">
           <div class="text-center align-middle mt-4 mb-4">
             <i class="fa-solid fa-users fs-1"></i>
-            <span class="fs-2 ms-2">Usuarios: <%= users.length %></span>
+            <span class="fs-2 ms-2 terminator">Usuarios: <%= users.length %></span>
           </div>
 
           <div class="row">
@@ -151,7 +156,7 @@
                       <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="col-md-6">
-                      <label for="password" class="form-label">Contraseña</label>
+                      <label for="passwd" class="form-label">Contraseña</label>
                       <input type="password" class="form-control" id="passwd" name="passwd" required>
                     </div>
                     <div class="col-md-12">
@@ -322,7 +327,7 @@
         document.getElementById('editName').value = d.name;
         document.getElementById('editPhone').value = d.phone;
         document.getElementById('editEmail').value = d.email;
-        document.getElementById('editPass').value = '';
+        document.getElementById('editPasswd').value = '';
             
         const typeSelect = document.getElementById('editType');
         typeSelect.value = d.type;
@@ -335,6 +340,18 @@
         const d = event.relatedTarget.dataset;
         document.getElementById('deleteUserEmail').value = d.email;
         document.getElementById('deleteUserName').textContent = d.name;
+      });
+
+      // Handle auto-dismiss of feedback alert
+      document.addEventListener("DOMContentLoaded", function () {
+        const alertElement = document.getElementById("admin-feedback");
+        if (alertElement) {
+          const bsAlert = bootstrap.Alert.getOrCreateInstance(alertElement);
+          // Auto-close
+          const timer = setTimeout(() => {
+            bsAlert.close();
+          }, 5000);
+        }
       });
     </script>
   </body>
