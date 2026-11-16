@@ -127,7 +127,7 @@
               </div>
             </div>
             <div class="col-md-8 text-end mb-3">
-              <button id="addUserBtn" class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addUserModal">
+              <button id="addUserBtn" class="btn btn-primary fw-bold fs-5" data-bs-toggle="modal" data-bs-target="#addUserModal">
                 <i class="fa-solid fa-user-plus"></i> Agregar Usuario
               </button> 
             </div>
@@ -248,7 +248,7 @@
 
           <div class="table-responsive">
             <table class="table table-hover">
-              <thead class="table-dark">
+              <thead class="table-dark fs-5">
                 <tr>
                   <th scope="col">Nombre</th>
                   <th scope="col">Email</th>
@@ -260,13 +260,13 @@
               <tbody>
                 <% users.forEach(user => { %>
                   <tr class="align-middle text-nowrap">
-                    <td><%= user.name %></td>
-                    <td><%= user.email %></td>
-                    <td><%= user.phone %></td>
+                    <td class="fs-5"><%= user.name %></td>
+                    <td class="fs-5"><%= user.email %></td>
+                    <td class="fs-5"><%= user.phone %></td>
                     <% if (user.type === 'admin') { %>
-                      <td>Administrador</td>
+                      <td class="fs-5">Administrador</td>
                     <% } else { %>
-                      <td>Usuario</td>
+                      <td class="fs-5">Usuario</td>
                     <% } %>
                     <td>
                       <button class="btn btn-sm btn-outline-primary edit-user-btn"
@@ -288,7 +288,52 @@
           </div>
         </div>
 
-        <div class="tab-pane fade <%= activeTab === 'history' ? 'show active' : '' %>" id="v-pills-history" role="tabpanel" aria-labelledby="v-pills-history-tab" tabindex="0">History</div>
+        <div class="tab-pane fade <%= activeTab === 'history' ? 'show active' : '' %>" id="v-pills-history" role="tabpanel" aria-labelledby="v-pills-history-tab" tabindex="0">
+          <div class="row">
+            <div class="col-md-4">
+              <div id="tableSearch" class="input-group mb-3">
+                <span class="input-group-text" id="search-addon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" class="form-control" placeholder="Buscar..." onkeyup="filterTable()" aria-label="search" aria-describedby="search-addon">
+              </div>
+            </div>
+            <div class="col-md-8 text-end mb-3">
+              <form action="/admin/history" method="get" class="d-inline">
+                <input type="hidden" name="tab" value="history">
+                <button type="submit" class="btn btn-primary fw-bold fs-5">
+                  <i class="fa-solid fa-arrows-rotate"></i> Actualizar
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-dark fs-5">
+                <tr>
+                  <th scope="col">Responsable</th>
+                  <th scope="col">Detalles</th>
+                  <th style="width: 390px;" scope="col">Fecha y Hora</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% history.forEach(entry => { %>
+                  <tr class="align-middle text-nowrap fs-5">
+                    <td><%= entry.user_name %></td>
+                    <td><%= entry.details %></td>
+                    <td><%= new Date(entry.date_of).toLocaleString('es-ES', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true
+                    }) %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
         <div class="tab-pane fade <%= activeTab === 'actions' ? 'show active' : '' %>" id="v-pills-actions" role="tabpanel" aria-labelledby="v-pills-actions-tab" tabindex="0">Actions</div>
       </div>

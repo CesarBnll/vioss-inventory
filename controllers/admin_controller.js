@@ -31,16 +31,9 @@ const add_user = async (req, res) => {
             text: 'Usuario agregado correctamente.'
         };
 
-        const user_name = await conn.query(`
-            SELECT name FROM users
-            WHERE id = ?
-        `, [req.session.user_id]);
-        user_name = user_name[0].name;
-
-        const resultsHistory = await conn.query(`
-            INSERT INTO history (details, user_name)
-            VALUES (?, ?)
-        `, [`Added user: ${name}`, user_name]);
+        let sql = `INSERT INTO history (details, user_name) VALUES (?, ?)`;
+        const user_name = await conn.query(`SELECT name FROM users WHERE id = ?`, [req.session.user_id]);
+        await conn.query(sql, [`Se agregó el usuario: ${name}`, user_name[0].name]);
         return res.redirect('/admin?tab=users');
     } catch (err) {
         console.error('Error adding admin user:', err);
@@ -82,6 +75,10 @@ const update_user = async (req, res) => {
         req.session.adminMessage = results.affectedRows === 0
             ? { type: 'error', text: 'No se encontró el usuario.' }
             : { type: 'success', text: 'Usuario actualizado correctamente.' };
+
+        sql = `INSERT INTO history (details, user_name) VALUES (?, ?)`;
+        const user_name = await conn.query(`SELECT name FROM users WHERE id = ?`, [req.session.user_id]);
+        await conn.query(sql, [`Se actualizó el usuario: ${name}`, user_name[0].name]);
     } catch (err) {
         console.error('Error updating user:', err);
         req.session.adminMessage = {
@@ -114,6 +111,10 @@ const delete_user = async (req, res) => {
         req.session.adminMessage = results.affectedRows === 0
             ? { type: 'error', text: 'No se pudo eliminar el usuario (o es tu propia cuenta).' }
             : { type: 'success', text: 'Usuario eliminado correctamente.' };
+
+        sql = `INSERT INTO history (details, user_name) VALUES (?, ?)`;
+        const user_name = await conn.query(`SELECT name FROM users WHERE id = ?`, [req.session.user_id]);
+        await conn.query(sql, [`Se eliminó el usuario: ${email}`, user_name[0].name]);
     } catch (err) {
         console.error('Error deleting user:', err);
         req.session.adminMessage = { type: 'error', text: 'Ocurrió un error al eliminar el usuario.' };

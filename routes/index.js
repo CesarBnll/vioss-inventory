@@ -31,15 +31,23 @@ router.get('/login/recovery', function(req, res, next) {
 router.post('/login/recovery', login_controller.recovery);
 
 /* ---------------- User page ---------------- */
-router.get('/user', function(req, res, next) {
+const requireUser = (req, res, next) => {
   if (!req.session.user_id) {
-    return res.redirect('/login?redirect=true');
-  } else {
-    let options = {
-        title: "Vioss GPS",
-        user_type: req.session.user_type
-    }
-    return res.render('user', options);
+    return res.redirect('/login?redirect=true&user=false');
+  }
+  next();
+};
+router.get('/user', requireUser, async function(req, res, next) {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const user = await conn.query('SELECT id, name, email, phone, type FROM users WHERE id = ?', [req.session.user_id]);
+
+    return res.render('user', { title: 'Vioss GPS', user: user[0] });
+  } catch (err) {
+    next(err);
+  } finally {
+    if (conn) conn.release();
   }
 });
 router.post('/user/logout', login_controller.logout);
@@ -57,6 +65,7 @@ router.get('/admin', requireAdmin, async function (req, res, next) {
   try {
     conn = await pool.getConnection();
     const users = await conn.query('SELECT id, name, email, phone, type FROM users');
+    const history = await conn.query('SELECT * FROM history ORDER BY date_of DESC');
     const message = req.session.adminMessage || null;
     delete req.session.adminMessage;
 
@@ -65,6 +74,7 @@ router.get('/admin', requireAdmin, async function (req, res, next) {
       activeTab: ['inventory', 'users', 'history', 'actions'].includes(req.query.tab) ? req.query.tab : 'inventory',
       message,
       users,
+      history,
       currentUserId: req.session.user_id
     });
   } catch (err) {
