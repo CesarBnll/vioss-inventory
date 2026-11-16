@@ -70,19 +70,19 @@
         <img src="/images/logo_white.png" alt="Logo de Vioss" class="img-fluid mt-3 mb-5">
         <button class="nav-link <%= activeTab === 'inventory' ? 'active' : '' %>" id="v-pills-inventory-tab" data-bs-toggle="pill" data-bs-target="#v-pills-inventory" type="button" role="tab" aria-controls="v-pills-inventory" aria-selected="<%= activeTab === 'inventory' %>">
           <i class="fa-solid fa-house me-1 nav-icon"></i>
-          <span class="nav-label">Activos</span>
+          <span class="nav-label">Inventario</span>
         </button>
         <button class="nav-link <%= activeTab === 'users' ? 'active' : '' %>" id="v-pills-users-tab" data-bs-toggle="pill" data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users" aria-selected="<%= activeTab === 'users' %>">
           <i class="fa-solid fa-user me-1 nav-icon"></i>
-          <span class="nav-label">Usuarios</span>
+          <span class="nav-label">Perfil</span>
         </button>
         <button class="nav-link <%= activeTab === 'history' ? 'active' : '' %>" id="v-pills-history-tab" data-bs-toggle="pill" data-bs-target="#v-pills-history" type="button" role="tab" aria-controls="v-pills-history" aria-selected="<%= activeTab === 'history' %>">
           <i class="fa-solid fa-clock-rotate-left me-1 nav-icon"></i>
-          <span class="nav-label">Historial</span>
+          <span class="nav-label">Mensajes</span>
         </button>
         <button class="nav-link <%= activeTab === 'actions' ? 'active' : '' %>" id="v-pills-actions-tab" data-bs-toggle="pill" data-bs-target="#v-pills-actions" type="button" role="tab" aria-controls="v-pills-actions" aria-selected="<%= activeTab === 'actions' %>">
           <i class="fa-solid fa-gear me-1 nav-icon"></i>
-          <span class="nav-label">Acciones</span>
+          <span class="nav-label">Ajustes</span>
         </button>
         <button type="button" class="nav-link" id="v-pills-logout-modal" data-bs-toggle="modal" data-bs-target="#logoutModal" aria-controls="v-pills-logout" aria-selected="false">
           <i class="fa-solid fa-sign-out-alt me-1 nav-icon"></i>
@@ -110,12 +110,39 @@
         </div>
       </div>
       <div class="tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">...</div>
-        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
-        <div class="tab-pane fade" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">...</div>
-        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
-        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
+        <div class="tab-pane fade <%= activeTab === 'inventory' ? 'show active' : '' %>" id="v-pills-inventory" role="tabpanel" aria-labelledby="v-pills-inventory-tab" tabindex="0">Inventory</div>
+
+        <div class="tab-pane fade <%= activeTab === 'users' ? 'show active' : '' %>" id="v-pills-users" role="tabpanel" aria-labelledby="v-pills-users-tab" tabindex="0">Perfil</div>
+
+        <div class="tab-pane fade <%= activeTab === 'history' ? 'show active' : '' %>" id="v-pills-history" role="tabpanel" aria-labelledby="v-pills-history-tab" tabindex="0">Mensajes</div>
+
+        <div class="tab-pane fade <%= activeTab === 'actions' ? 'show active' : '' %>" id="v-pills-actions" role="tabpanel" aria-labelledby="v-pills-actions-tab" tabindex="0">Ajustes</div>
       </div>
     </div>
+    <script>
+      const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
+        
+      tabButtons.forEach(tabButton => {
+        tabButton.addEventListener('shown.bs.tab', event => {
+          const selectedTarget = event.target.getAttribute('data-bs-target');
+        
+          // Keep both navs (mobile + desktop) in sync
+          tabButtons.forEach(button => {
+            const isSelected = button.getAttribute('data-bs-target') === selectedTarget;
+            button.classList.toggle('active', isSelected);
+            button.setAttribute('aria-selected', String(isSelected));
+          });
+        
+          // Remember the tab on refresh (matches your ?tab= query handling)
+          const tabName = selectedTarget.replace('#v-pills-', '');
+          history.replaceState(null, '', `/admin?tab=${tabName}`);
+        
+          // Close the mobile sidebar after choosing a tab
+          const sidebar = document.getElementById('adminSidebar');
+          const offcanvas = bootstrap.Offcanvas.getInstance(sidebar);
+          if (offcanvas) offcanvas.hide();
+        });
+      });
+    </script>
   </body>
 </html>
